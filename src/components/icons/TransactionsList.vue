@@ -77,7 +77,7 @@ onMounted(() => {
 
 <template>
   <h2>{{ title }}</h2>
-  <form @submit="onFormSubmitted()" @submit.prevent>
+    <form @submit.prevent="onFormSubmitted()">
     <!-- "@submit.prevent" prevents a page refresh after submitting form -->
     <input class="form-input" type="text" placeholder="Name" v-model="nameField" />
     <select class="form-input" v-model="categoryField">
