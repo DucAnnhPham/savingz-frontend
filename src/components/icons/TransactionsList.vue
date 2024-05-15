@@ -109,7 +109,7 @@ onMounted(() => {
       <td>{{ transaction.transactionName }}</td>
       <td>{{ transaction.transactionCategory }}</td>
       <td>{{ transaction.formattedDate }}</td>
-      <td>{{ transaction.transactionAmount }}</td>
+      <td>{{ (Math.round(transaction.transactionAmount * 100) / 100).toFixed(2) }}</td>
       <td>({{ transaction.transactionID }})</td>
       <td>
       <button @click="removeTransaction(transaction.transactionID)" class="delete">delete</button>
@@ -117,8 +117,6 @@ onMounted(() => {
     </tr>
 
   </table>
-
-
 
 </template>
 
