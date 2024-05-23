@@ -7,7 +7,6 @@ type Transaction = {  transactionID : number
                       transactionName: string,
                       transactionCategory: string,
                       transactionDate: Date
-                      formattedDate: string,
                       transactionAmount: number,}
 
 const transactions: Ref<Transaction[]> = ref([])
@@ -26,8 +25,7 @@ function initTransactionlist(): void {
 }
 
 function addTransaction(transactionName: string, transactionCategory: string, transactionDate: Date, transactionAmount: number): void {
-  const formattedDate = formatDate(transactionDate);
-  transactions.value.push({transactionName,transactionCategory,transactionDate,formattedDate,transactionAmount, transactionID: currentID++ })
+  transactions.value.push({transactionName,transactionCategory,transactionDate,transactionAmount, transactionID: currentID++ })
 }
 
 function onFormSubmitted(): void {
@@ -108,7 +106,7 @@ onMounted(() => {
 
       <td>{{ transaction.transactionName }}</td>
       <td>{{ transaction.transactionCategory }}</td>
-      <td>{{ transaction.formattedDate }}</td>
+      <td>{{ formatDate(transaction.transactionDate) }}</td>
       <td>{{ (Math.round(transaction.transactionAmount * 100) / 100).toFixed(2) }}</td>
       <td>({{ transaction.transactionID }})</td>
       <td>
@@ -149,6 +147,7 @@ form {
 
 table {
   margin: 16px -16px 0;
+  color: black;
 
   th,
   td {
