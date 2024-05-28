@@ -29,14 +29,14 @@ function createTransaction(): void {
     amount: amountField.value
   }
   axios
-      .post<Transaction>('${url}/transactions', transaction)
+      .post<Transaction>(`${url}/transactions`, transaction)
       .then((response) => transactions.value.push(response.data))
       .catch((error) => console.log(error))
 }
 
 function requestTransactions(): void {
   axios
-      .get<Transaction[]>('${url}/transactions')
+      .get<Transaction[]>(`${url}/transactions`)
       .then((response) => (transactions.value = response.data))
       .catch((error) => console.log(error))
 }
