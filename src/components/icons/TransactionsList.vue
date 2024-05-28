@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue'
+import axios from "axios";
 
 defineProps<{ title: string }>()
 
@@ -18,15 +19,26 @@ const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'O
 const errorMessage: Ref<string[]> = ref([])
 let currentID = 1
 
-
-function initTransactionlist(): void {
-  addTransaction("Groceries", "Food", new Date("2024-04-19"), Number("56.73"))
-  addTransaction("Jacket", "Clothing", new Date("2024-04-18"), Number("76.95"))
+function createTransaction(): void {
+  const hero = {
+    name: nameField.value,
+    category: categoryField.value,
+    date: dateField.value,
+    amount: amountField.value
+  }
+  axios
+      .post<Transaction>('http://localhost:8080/transactions', hero)
+      .then((response) => transactions.value.push(response.data))
+      .catch((error) => console.log(error))
 }
 
-function addTransaction(transactionName: string, transactionCategory: string, transactionDate: Date, transactionAmount: number): void {
-  transactions.value.push({transactionName,transactionCategory,transactionDate,transactionAmount, transactionID: currentID++ })
+function requestTransactions(): void {
+  axios
+      .get<Transaction[]>('http://localhost:8080/transactions')
+      .then((response) => (transactions.value = response.data))
+      .catch((error) => console.log(error))
 }
+
 
 function onFormSubmitted(): void {
   errorMessage.value = []
@@ -45,8 +57,7 @@ function onFormSubmitted(): void {
   if(errorMessage.value.length > 0){
     return;
   }
-  addTransaction(nameField.value, categoryField.value, new Date(dateField.value),Number(amountField.value))
-
+  createTransaction()
   nameField.value = "";
   categoryField.value = "";
   dateField.value = "";
@@ -56,7 +67,10 @@ function onFormSubmitted(): void {
 }
 
 function removeTransaction(id: number): void {
-  transactions.value = transactions.value.filter((transaction) => transaction.transactionID !== id)
+  axios
+      .delete<void>(`http://localhost:8080/transactions/${id}`)
+      .then(() => (transactions.value = transactions.value.filter((h) => h.transactionID !== id)))
+      .catch((error) => console.log(error))
 }
 
 function formatDate(date: Date): string{
@@ -67,9 +81,7 @@ function formatDate(date: Date): string{
 }
 
 // Lifecycle Hook
-onMounted(() => {
-  initTransactionlist()
-})
+onMounted(() => requestTransactions())
 
 </script>
 
