@@ -19,6 +19,8 @@ const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'O
 const errorMessage: Ref<string[]> = ref([])
 let currentID = 1
 
+const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
+
 function createTransaction(): void {
   const hero = {
     name: nameField.value,
@@ -27,14 +29,14 @@ function createTransaction(): void {
     amount: amountField.value
   }
   axios
-      .post<Transaction>('http://localhost:8080/transactions', hero)
+      .post<Transaction>(url+'/transactions', hero)
       .then((response) => transactions.value.push(response.data))
       .catch((error) => console.log(error))
 }
 
 function requestTransactions(): void {
   axios
-      .get<Transaction[]>('http://localhost:8080/transactions')
+      .get<Transaction[]>(url+'/transactions')
       .then((response) => (transactions.value = response.data))
       .catch((error) => console.log(error))
 }
@@ -68,7 +70,7 @@ function onFormSubmitted(): void {
 
 function removeTransaction(id: number): void {
   axios
-      .delete<void>(`http://localhost:8080/transactions/${id}`)
+      .delete<void>(url+`/transactions/${id}`)
       .then(() => (transactions.value = transactions.value.filter((h) => h.transactionID !== id)))
       .catch((error) => console.log(error))
 }
