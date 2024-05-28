@@ -46,3 +46,9 @@ npm run lint
 
 quelle Bild Münze:
 https://www.vecteezy.com/png/24029995-money-coins-clipart-transparent-background
+
+28.05.24
+Frontend wurde auf render erfolgreich deployt(Probleme werden noch geklärt)
+kleine probleme beim anzeigen auf render (Transactionview verschwindet nach 1ms)
+Daten aus Backend werden nicht anezeigt aber der Get Aufruf funktioniert wenn man im Browser im Network guckt
+    daten sind dort zusehen werden aber nicht angezeigt
