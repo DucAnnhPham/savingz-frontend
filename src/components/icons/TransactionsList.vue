@@ -22,21 +22,21 @@ let currentID = 1
 const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
 
 function createTransaction(): void {
-  const hero = {
+  const transaction = {
     name: nameField.value,
     category: categoryField.value,
     date: dateField.value,
     amount: amountField.value
   }
   axios
-      .post<Transaction>(url+'/transactions', hero)
+      .post<Transaction>('${url}/transactions', transaction)
       .then((response) => transactions.value.push(response.data))
       .catch((error) => console.log(error))
 }
 
 function requestTransactions(): void {
   axios
-      .get<Transaction[]>(url+'/transactions')
+      .get<Transaction[]>('${url}/transactions')
       .then((response) => (transactions.value = response.data))
       .catch((error) => console.log(error))
 }
@@ -70,7 +70,7 @@ function onFormSubmitted(): void {
 
 function removeTransaction(id: number): void {
   axios
-      .delete<void>(url+`/transactions/${id}`)
+      .delete<void>(`${url}/transactions/${id}`)
       .then(() => (transactions.value = transactions.value.filter((h) => h.transactionID !== id)))
       .catch((error) => console.log(error))
 }
