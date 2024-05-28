@@ -10,7 +10,7 @@ type Transaction = {  transactionID : number
                       transactionDate: Date
                       transactionAmount: number,}
 
-const transactions: Ref<Transaction[]> = ref([])
+const transactionsListData: Ref<Transaction[]> = ref([])
 const nameField = ref("")
 const categoryField = ref("")
 const amountField = ref("")
@@ -30,14 +30,14 @@ function createTransaction(): void {
   }
   axios
       .post<Transaction>(`${url}/transactions`, transaction)
-      .then((response) => transactions.value.push(response.data))
+      .then((response) => transactionsListData.value.push(response.data))
       .catch((error) => console.log(error))
 }
 
 function requestTransactions(): void {
   axios
       .get<Transaction[]>(`${url}/transactions`)
-      .then((response) => (transactions.value = response.data))
+      .then((response) => (transactionsListData.value = response.data))
       .catch((error) => console.log(error))
 }
 
@@ -71,7 +71,7 @@ function onFormSubmitted(): void {
 function removeTransaction(id: number): void {
   axios
       .delete<void>(`${url}/transactions/${id}`)
-      .then(() => (transactions.value = transactions.value.filter((h) => h.transactionID !== id)))
+      .then(() => (transactionsListData.value = transactionsListData.value.filter((h) => h.transactionID !== id)))
       .catch((error) => console.log(error))
 }
 
@@ -113,10 +113,10 @@ onMounted(() => requestTransactions())
       <th>ID</th>
       <th>Delete</th>
     </tr>
-    <tr v-if="!transactions.length">
+    <tr v-if="!transactionsListData.length">
       <td colspan="2">The are no past Transactions!</td>
     </tr>
-    <tr v-for="transaction in transactions" :key="transaction.transactionID">
+    <tr v-for="transaction in transactionsListData" :key="transaction.transactionID">
 
       <td>{{ transaction.transactionName }}</td>
       <td>{{ transaction.transactionCategory }}</td>
