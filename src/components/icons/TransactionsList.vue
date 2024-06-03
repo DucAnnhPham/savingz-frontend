@@ -4,11 +4,13 @@ import axios from "axios";
 
 defineProps<{ title: string }>()
 
-type Transaction = {  transactionID : number
-                      transactionName: string,
-                      transactionCategory: string,
-                      transactionDate: Date
-                      transactionAmount: number,}
+type Transaction = {
+  transactionName: string,
+  transactionCategory: string,
+  transactionDate: string,
+  transactionAmount: string,
+  id : number
+}
 
 const transactionsListData: Ref<Transaction[]> = ref([])
 const nameField = ref("")
@@ -71,11 +73,12 @@ function onFormSubmitted(): void {
 function removeTransaction(id: number): void {
   axios
       .delete<void>(`${url}/transactions/${id}`)
-      .then(() => (transactionsListData.value = transactionsListData.value.filter((h) => h.transactionID !== id)))
+      .then(() => (transactionsListData.value = transactionsListData.value.filter((h) => h.id !== id)))
       .catch((error) => console.log(error))
 }
 
-function formatDate(date: Date): string{
+function formatDate(dateString: string): string{
+  const date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
   const year = date.getFullYear();
@@ -116,15 +119,15 @@ onMounted(() => requestTransactions())
     <tr v-if="!transactionsListData.length">
       <td colspan="2">The are no past Transactions!</td>
     </tr>
-    <tr v-for="transaction in transactionsListData" :key="transaction.transactionID">
+    <tr v-for="transaction in transactionsListData" :key="transaction.id">
 
       <td>{{ transaction.transactionName }}</td>
       <td>{{ transaction.transactionCategory }}</td>
       <td>{{ formatDate(transaction.transactionDate) }}</td>
-      <td>{{ (Math.round(transaction.transactionAmount * 100) / 100).toFixed(2) }}</td>
-      <td>({{ transaction.transactionID }})</td>
+      <td>{{ (Math.round(parseFloat(transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
+      <td>({{ transaction.id }})</td>
       <td>
-      <button @click="removeTransaction(transaction.transactionID)" class="delete">delete</button>
+      <button @click="removeTransaction(transaction.id)" class="delete">delete</button>
       </td>
     </tr>
 
