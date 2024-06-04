@@ -7,8 +7,8 @@ defineProps<{ title: string }>()
 type Transaction = {
   transactionName: string,
   transactionCategory: string,
-  transactionDate: string,
-  transactionAmount: string,
+  transactionDate: Date,
+  transactionAmount: number,
   id : number
 }
 
@@ -22,27 +22,6 @@ const errorMessage: Ref<string[]> = ref([])
 let currentID = 1
 
 const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
-
-function createTransaction(): void {
-  const transaction = {
-    name: nameField.value,
-    category: categoryField.value,
-    date: dateField.value,
-    amount: amountField.value
-  }
-  axios
-      .post<Transaction>(`${url}/transactions`, transaction)
-      .then((response) => transactionsListData.value.push(response.data))
-      .catch((error) => console.log(error))
-}
-
-function requestTransactions(): void {
-  axios
-      .get<Transaction[]>(`${url}/transactions`)
-      .then((response) => (transactionsListData.value = response.data))
-      .catch((error) => console.log(error))
-}
-
 
 function onFormSubmitted(): void {
   errorMessage.value = []
@@ -70,6 +49,26 @@ function onFormSubmitted(): void {
 
 }
 
+function createTransaction(): void {
+  const transaction = {
+    name: nameField.value,
+    category: categoryField.value,
+    date: dateField.value,
+    amount: amountField.value
+  }
+  axios
+      .post<Transaction>(`${url}/transactions`, transaction)
+      .then((response) => transactionsListData.value.push(response.data))
+      .catch((error) => console.log(error))
+}
+
+function requestTransactions(): void {
+  axios
+      .get<Transaction[]>(`${url}/transactions`)
+      .then((response) => (transactionsListData.value = response.data))
+      .catch((error) => console.log(error))
+}
+
 function removeTransaction(id: number): void {
   axios
       .delete<void>(`${url}/transactions/${id}`)
@@ -77,7 +76,7 @@ function removeTransaction(id: number): void {
       .catch((error) => console.log(error))
 }
 
-function formatDate(dateString: string): string{
+function formatDate(dateString: Date): string{
   const date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
@@ -124,7 +123,7 @@ onMounted(() => requestTransactions())
       <td>{{ transaction.transactionName }}</td>
       <td>{{ transaction.transactionCategory }}</td>
       <td>{{ formatDate(transaction.transactionDate) }}</td>
-      <td>{{ (Math.round(parseFloat(transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
+      <td>{{ (Math.round((transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
       <td>({{ transaction.id }})</td>
       <td>
       <button @click="removeTransaction(transaction.id)" class="delete">delete</button>
