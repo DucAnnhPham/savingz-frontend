@@ -19,7 +19,6 @@ const amountField = ref("")
 const dateField = ref("")
 const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'Other']
 const errorMessage: Ref<string[]> = ref([])
-let currentID = 1
 
 const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
 
@@ -51,10 +50,10 @@ function onFormSubmitted(): void {
 
 function createTransaction(): void {
   const transaction = {
-    name: nameField.value,
-    category: categoryField.value,
-    date: dateField.value,
-    amount: amountField.value
+    transactionName: nameField.value, // string
+    transactionCategory: categoryField.value, // string
+    transactionDate: dateField.value, // string in "yyyy-MM-dd" format
+    transactionAmount: parseFloat(amountField.value) // number
   }
   axios
       .post<Transaction>(`${url}/transactions`, transaction)
