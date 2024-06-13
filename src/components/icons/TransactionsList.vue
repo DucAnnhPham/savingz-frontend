@@ -138,7 +138,6 @@ onMounted(() => requestTransactions())
         <th>Category</th>
         <th>Date</th>
         <th>Amount</th>
-        <th>ID</th>
         <th>Delete</th>
       </tr>
       <tr v-if="!transactionsListData.length">
