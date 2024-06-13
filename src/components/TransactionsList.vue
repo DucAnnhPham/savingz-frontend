@@ -9,8 +9,9 @@ type Transaction = {
   transactionCategory: string,
   transactionDate: Date,
   transactionAmount: number,
-  id : number
-  [key: string]: string | number | Date;
+  id : number,
+  isEditing: boolean,
+  [key: string]: string | number | Date | boolean;
 }
 
 const transactionsListData: Ref<Transaction[]> = ref([])
@@ -67,6 +68,19 @@ function requestTransactions(): void {
   axios
       .get<Transaction[]>(`${url}/transactions`)
       .then((response) => (transactionsListData.value = response.data))
+      .catch((error) => console.log(error))
+}
+function editTransaction(transaction: Transaction): void {
+  transaction.isEditing = true;
+}
+
+function updateTransaction(id: number, transaction: Transaction): void {
+  axios
+      .put<Transaction>(`${url}/transactions/${id}`, transaction)
+      .then((response) => {
+        const index = transactionsListData.value.findIndex((h) => h.id === id)
+        transactionsListData.value[index] = { ...response.data, isEditing: false }
+      })
       .catch((error) => console.log(error))
 }
 
@@ -152,18 +166,37 @@ onMounted(() => requestTransactions())
         <th>Category</th>
         <th>Date</th>
         <th>Amount</th>
-        <th>Delete</th>
+        <th>Edit/Delete Transaction</th>
       </tr>
       <tr v-if="!transactionsListData.length">
         <td colspan="2">The are no past Transactions!</td>
-      </tr>
-      <tr v-for="transaction in transactionsListData" :key="transaction.id">
-        <td>{{ transaction.transactionName }}</td>
-        <td>{{ transaction.transactionCategory }}</td>
-        <td>{{ formatDate(transaction.transactionDate) }}</td>
-        <td>{{ (Math.round((transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
-        <td><button @click="removeTransaction(transaction.id)" class="delete">delete</button></td>
-      </tr>
+      </tr><tr v-for="transaction in transactionsListData" :key="transaction.id">
+      <td v-if="!transaction.isEditing">{{ transaction.transactionName }}</td>
+      <td v-else><input v-model="transaction.transactionName" /></td>
+
+      <td v-if="!transaction.isEditing">{{ transaction.transactionCategory }}</td>
+      <td v-else>
+        <select v-model="transaction.transactionCategory">
+          <option v-for="category in categories" :key="category" :value="category">
+            {{ category }}
+          </option>
+        </select>
+      </td>
+
+      <td v-if="!transaction.isEditing">{{ formatDate(transaction.transactionDate) }}</td>
+      <td v-else><input type="date" v-model="transaction.transactionDate" /></td>
+
+      <td v-if="!transaction.isEditing">{{ transaction.transactionAmount.toFixed(2) }}</td>
+      <td v-else><input type="number" v-model="transaction.transactionAmount" /></td>
+
+
+      <td class="button-container">
+        <button class="button-click" @click="editTransaction(transaction)" v-if="!transaction.isEditing">Edit</button>
+        <button class="button-click" @click="updateTransaction(transaction.id, transaction)" v-else>Save</button>
+        <button class="button-click" @click="removeTransaction(transaction.id)">Delete</button>
+      </td>
+
+    </tr>
 
       <tr class="total-amount-row">
         <td colspan="3">Total Amount:</td>
@@ -239,13 +272,29 @@ table th, table td {
 
 button {
   border-radius: 50px;
-  padding: 10px;
+  padding: 5px;
   border: none;
   background: #72661b;
   color: #ffffff;
   width: 100px;
   heigth: 50px;
 
+}
+
+
+.button-container {
+  display: flex;
+  justify-content: space-around; /* Adjusts the spacing between the buttons */
+  align-items: center; /* Aligns the buttons vertically in the middle */
+  flex-direction: row; /* Ensures the buttons are placed in a row */
+}
+.button-click {
+  background: #72661b;
+  color: #ffffff;
+  border: none;
+  padding: 5px;
+  border-radius: 50px;
+  cursor: pointer;
 }
 
 </style>

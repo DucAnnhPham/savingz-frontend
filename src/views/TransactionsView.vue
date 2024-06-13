@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TransactionsList from "@/components/icons/TransactionsList.vue";
+import TransactionsList from "@/components/TransactionsList.vue";
 </script>
 
 <template>
