@@ -200,7 +200,7 @@ onMounted(() => requestTransactions())
 
       <tr class="total-amount-row">
         <td colspan="3">Total Amount:</td>
-        <td>{{ getTotalAmount() }}</td>
+        <td>{{ getTotalAmount().toFixed(2) }}</td>
       </tr>
 
     </table>
