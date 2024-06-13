@@ -106,6 +106,9 @@ onMounted(() => requestTransactions())
 </script>
 
 <template>
+
+
+
   <h2>{{ title }}</h2>
   <div class="sort-container">
     <h3>Sort by:</h3>
@@ -118,6 +121,9 @@ onMounted(() => requestTransactions())
       <option value="transactionAmount">Amount</option>
     </select>
   </div>
+  <tr v-if="errorMessage.length" class="error-popup">
+    <li v-for="(error, index) in errorMessage" :key="index">{{ error }}</li>
+  </tr>
   <div class="container">
       <form @submit.prevent="onFormSubmitted()">
       <!-- "@submit.prevent" prevents a page refresh after submitting form -->
@@ -177,6 +183,11 @@ h3 {
   gap: 10px;
 }
 
+.error-popup li {
+  display: inline-block;
+  margin-right: 10px; /* Add some space between the messages */
+}
+
 .form-input, .form-input select {
   box-sizing: border-box;
   width: 180px;
@@ -192,10 +203,6 @@ form {
   * {
     margin: 16px;
   }
-
-  input {
-    flex-grow: 1;
-  }
 }
 
 table {
@@ -209,17 +216,15 @@ table th, table td {
   padding: 16px;
 }
 
-table th:nth-last-child(-n+2), table td:nth-last-child(-n+2) {
-  width: 80px; /* Half the size of the other columns */
-}
 
 button {
   border-radius: 50px;
   padding: 10px;
   border: none;
-  cursor: pointer;
   background: #72661b;
   color: #ffffff;
+  width: 100px;
+  heigth: 50px;
 
 }
 
