@@ -18,7 +18,7 @@ const nameField = ref("")
 const categoryField = ref("")
 const amountField = ref("")
 const dateField = ref("")
-const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'Other']
+const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'Income' ,'Other']
 const errorMessage: Ref<string[]> = ref([])
 const sortField = ref('')
 
@@ -98,6 +98,14 @@ function sortTransactions() {
     })
   }
 }
+
+function getTotalAmount() {
+  let total = 0;
+  for (let i = 0; i < transactionsListData.value.length; i++) {
+    total += transactionsListData.value[i].transactionAmount;
+  }
+  return total;
+}
 watch(sortField, sortTransactions)
 
 // Lifecycle Hook
@@ -122,7 +130,7 @@ onMounted(() => requestTransactions())
     </select>
   </div>
   <tr v-if="errorMessage.length" class="error-popup">
-    <li v-for="(error, index) in errorMessage" :key="index">{{ error }}</li>
+    <td v-for="(error, index) in errorMessage" :key="index">{{ error }}</td>
   </tr>
   <div class="container">
       <form @submit.prevent="onFormSubmitted()">
@@ -157,6 +165,11 @@ onMounted(() => requestTransactions())
         <td><button @click="removeTransaction(transaction.id)" class="delete">delete</button></td>
       </tr>
 
+      <tr class="total-amount-row">
+        <td colspan="3">Total Amount:</td>
+        <td>{{ getTotalAmount() }}</td>
+      </tr>
+
     </table>
   </div>
 </template>
@@ -183,9 +196,16 @@ h3 {
   gap: 10px;
 }
 
-.error-popup li {
+.error-popup td {
   display: inline-block;
-  margin-right: 10px; /* Add some space between the messages */
+  margin-right: 17px;
+  color: darkred;
+  font-size: 13.5px;
+}
+
+.total-amount-row td {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .form-input, .form-input select {
