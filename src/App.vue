@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import TransactionsList from "@/components/icons/TransactionsList.vue";
 </script>
 
 <template>
   <header>
-    <img alt="savings_pic" class="logo" src="@/assets/coins-pic.png" width="125" height="125" />
-    <h1 class="black">{{ "Savingz" }}</h1>
     <div class="wrapper">
       <nav>
+        <img alt="savings_pic" src="@/assets/coins-pic-horizontal.png" width="250" height="50" />
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <router-link to="/transactions">Transactions</router-link>
+        <RouterLink to="/transactions">Transactions</RouterLink>
       </nav>
     </div>
   </header>
@@ -22,47 +18,42 @@ import TransactionsList from "@/components/icons/TransactionsList.vue";
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 30px;
+  width: 100%;
+  z-index: 1;
 }
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+
 
 h1 {
   font-weight: 500;
   font-size: 2.6rem;
-  position: relative;
-  top: -50px;
   color: #72661b;
 }
 
 nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: left;
-  margin-top: 2rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-nav a.router-link-exact-active {
-  color: darkgoldenrod;
+nav a.router-link-active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 5px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
 
 nav a {
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-  left: -125px;
   color: black;
   position: relative;
+  font-size: 15px;
 }
 
 @media (min-width: 1024px) {
@@ -72,9 +63,6 @@ nav a {
     padding-right: calc(var(--section-gap) / 2);
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
 
   header .wrapper {
     display: flex;

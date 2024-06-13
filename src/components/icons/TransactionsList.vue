@@ -90,47 +90,45 @@ onMounted(() => requestTransactions())
 
 <template>
   <h2>{{ title }}</h2>
-    <form @submit.prevent="onFormSubmitted()">
-    <!-- "@submit.prevent" prevents a page refresh after submitting form -->
-    <input class="form-input" type="text" placeholder="Name" v-model="nameField" />
-    <select class="form-input" v-model="categoryField">
-      <option value="" disabled selected>Select a Category</option>
-      <option v-for="category in categories" :key="category" :value="category">
-        {{ category }}
-      </option>
-    </select>
-    <input class="form-input" type="date" placeholder="Date" v-model="dateField" />
-    <input class="form-input" type="number" placeholder="Amount" v-model="amountField" step="0.01"/>
-    <button>Add Transaction</button>
-    <p style="color: red" v-for="(error, index) in errorMessage" :key="index">{{ error }}</p>  </form>
-  <hr />
-  <table>
-    <tr>
+  <div class="container">
+      <form @submit.prevent="onFormSubmitted()">
+      <!-- "@submit.prevent" prevents a page refresh after submitting form -->
+      <input class="form-input" type="text" placeholder="Name" v-model="nameField" />
+      <select class="form-input" v-model="categoryField">
+        <option value="" disabled selected>Select a Category</option>
+        <option v-for="category in categories" :key="category" :value="category">
+          {{ category }}
+        </option>
+      </select>
+      <input class="form-input" type="date" placeholder="Date" v-model="dateField" />
+      <input class="form-input" type="number" placeholder="Amount" v-model="amountField" step="0.01"/>
+      <button>Add Transaction</button>
+      <p style="color: red" v-for="(error, index) in errorMessage" :key="index">{{ error }}</p>  </form>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>ID</th>
+        <th>Delete</th>
+      </tr>
+      <tr v-if="!transactionsListData.length">
+        <td colspan="2">The are no past Transactions!</td>
+      </tr>
+      <tr v-for="transaction in transactionsListData" :key="transaction.id">
+        <td>{{ transaction.transactionName }}</td>
+        <td>{{ transaction.transactionCategory }}</td>
+        <td>{{ formatDate(transaction.transactionDate) }}</td>
+        <td>{{ (Math.round((transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
+        <td>({{ transaction.id }})</td>
+        <td>
+          <button @click="removeTransaction(transaction.id)" class="delete">delete</button>
+        </td>
+      </tr>
 
-      <th>Name</th>
-      <th>Category</th>
-      <th>Date</th>
-      <th>Amount</th>
-      <th>ID</th>
-      <th>Delete</th>
-    </tr>
-    <tr v-if="!transactionsListData.length">
-      <td colspan="2">The are no past Transactions!</td>
-    </tr>
-    <tr v-for="transaction in transactionsListData" :key="transaction.id">
-
-      <td>{{ transaction.transactionName }}</td>
-      <td>{{ transaction.transactionCategory }}</td>
-      <td>{{ formatDate(transaction.transactionDate) }}</td>
-      <td>{{ (Math.round((transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
-      <td>({{ transaction.id }})</td>
-      <td>
-      <button @click="removeTransaction(transaction.id)" class="delete">delete</button>
-      </td>
-    </tr>
-
-  </table>
-
+    </table>
+  </div>
 </template>
 
 <style scoped>
@@ -139,12 +137,18 @@ h2 {
   font-size: 50px;
   color: #72661b;
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 
-.form-input {
-  width: 160px; /* Adjust this value to your needs */
+.form-input, .form-input select {
   box-sizing: border-box;
-  padding: 0; /* Reset padding */
-  border: 0; /* Reset border */
+  width: 180px;
+  height: 40px;
+  padding: 0;
+  border: none;
 }
 
 form {
@@ -164,14 +168,11 @@ table {
   margin: 16px -16px 0;
   color: black;
 
-  th,
-  td {
-    padding: 16px;
-  }
 }
 table th, table td {
   text-align: center;
   width: 200px; /* Adjust this value to your needs */
+  padding: 16px;
 }
 
 table th:nth-last-child(-n+2), table td:nth-last-child(-n+2) {
@@ -183,11 +184,9 @@ button {
   padding: 10px;
   border: none;
   cursor: pointer;
+  background: #72661b;
+  color: #ffffff;
 
-  &.delete {
-    background: #72661b;
-    color: #f4e4fd;
-  }
 }
 
 </style>
