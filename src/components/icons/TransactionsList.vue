@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import {onMounted, ref, type Ref, watch} from 'vue'
 import axios from "axios";
 
 defineProps<{ title: string }>()
@@ -10,6 +10,7 @@ type Transaction = {
   transactionDate: Date,
   transactionAmount: number,
   id : number
+  [key: string]: string | number | Date;
 }
 
 const transactionsListData: Ref<Transaction[]> = ref([])
@@ -19,6 +20,7 @@ const amountField = ref("")
 const dateField = ref("")
 const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'Other']
 const errorMessage: Ref<string[]> = ref([])
+const sortField = ref('')
 
 const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
 
@@ -83,6 +85,21 @@ function formatDate(dateString: Date): string{
   return `${day}.${month}.${year}`;
 }
 
+function sortTransactions() {
+  if (sortField.value) {
+    transactionsListData.value.sort((a, b) => {
+      if (a[sortField.value] < b[sortField.value]) {
+        return -1;
+      }
+      if (a[sortField.value] > b[sortField.value]) {
+        return 1;
+      }
+      return 0;
+    })
+  }
+}
+watch(sortField, sortTransactions)
+
 // Lifecycle Hook
 onMounted(() => requestTransactions())
 
@@ -90,6 +107,17 @@ onMounted(() => requestTransactions())
 
 <template>
   <h2>{{ title }}</h2>
+  <div class="sort-container">
+    <h3>Sort by:</h3>
+    <select v-model="sortField">
+      <option value="" disabled selected>Choose Sorting-Category </option>
+      <option value="id">recently added</option>
+      <option value="transactionName">Name</option>
+      <option value="transactionCategory">Category</option>
+      <option value="transactionDate">Date</option>
+      <option value="transactionAmount">Amount</option>
+    </select>
+  </div>
   <div class="container">
       <form @submit.prevent="onFormSubmitted()">
       <!-- "@submit.prevent" prevents a page refresh after submitting form -->
@@ -103,7 +131,7 @@ onMounted(() => requestTransactions())
       <input class="form-input" type="date" placeholder="Date" v-model="dateField" />
       <input class="form-input" type="number" placeholder="Amount" v-model="amountField" step="0.01"/>
       <button>Add Transaction</button>
-      <p style="color: red" v-for="(error, index) in errorMessage" :key="index">{{ error }}</p>  </form>
+      </form>
     <table>
       <tr>
         <th>Name</th>
@@ -137,10 +165,20 @@ h2 {
   font-size: 50px;
   color: #72661b;
 }
+h3 {
+  font-size: 15px;
+  color: #000709;
+}
 .container {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+}
+.sort-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
 }
 
 .form-input, .form-input select {
