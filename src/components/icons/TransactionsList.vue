@@ -110,7 +110,7 @@ onMounted(() => requestTransactions())
   <div class="sort-container">
     <h3>Sort by:</h3>
     <select v-model="sortField">
-      <option value="" disabled selected>Choose Sorting-Category </option>
+      <option value="" disabled selected>Default(recently added)</option>
       <option value="id">recently added</option>
       <option value="transactionName">Name</option>
       <option value="transactionCategory">Category</option>
@@ -149,10 +149,7 @@ onMounted(() => requestTransactions())
         <td>{{ transaction.transactionCategory }}</td>
         <td>{{ formatDate(transaction.transactionDate) }}</td>
         <td>{{ (Math.round((transaction.transactionAmount) * 100) / 100).toFixed(2) }}</td>
-        <td>({{ transaction.id }})</td>
-        <td>
-          <button @click="removeTransaction(transaction.id)" class="delete">delete</button>
-        </td>
+        <td><button @click="removeTransaction(transaction.id)" class="delete">delete</button></td>
       </tr>
 
     </table>
