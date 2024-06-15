@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref} from 'vue';
 import { useRouter } from 'vue-router';
-import axios from "axios";
+import axios, {type AxiosError} from "axios";
 
 const router = useRouter();
 const username = ref('');
@@ -22,7 +22,12 @@ const login = async () => {
       router.push('/').then(() => window.location.reload()); // Redirect to home page
     }
   } catch (error) {
-    errorMessage.value = 'Invalid username or password';
+    const axiosError = error as AxiosError;
+    if (axiosError.response && axiosError.response.status === 401) {
+      errorMessage.value = 'Invalid username or password';
+    } else {
+      errorMessage.value = 'An error occurred';
+    }
   }
 };
 </script>
