@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import router from "@/router";
+import {computed} from "vue";
+
+const logout = () => {
+  localStorage.removeItem('token'); // Remove token from local storage
+  router.push('/login').then(() => window.location.reload()); // Redirect to login page and then refresh
+};
+
+const isLoggedIn = computed(() => !!window.localStorage.getItem('token'));
+
+
 </script>
 
 <template>
@@ -8,8 +19,10 @@ import { RouterLink, RouterView } from 'vue-router'
       <nav>
         <img alt="savings_pic" src="@/assets/coins-pic-horizontal.png" width="250" height="50" />
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/transactions">Transactions</RouterLink>
+        <RouterLink v-if="isLoggedIn" to="/transactions">Transactions</RouterLink>
+        <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
       </nav>
+      <button v-if="isLoggedIn" @click="logout">LogOut</button>
     </div>
   </header>
 
@@ -37,6 +50,13 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+button{
+  font-size: 15px;
+  margin-top: -50px;
+  margin-left: 1400px;
+
 }
 
 nav a.router-link-active {

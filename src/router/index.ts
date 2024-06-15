@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import TransactionsView from '../views/TransactionsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,9 +20,37 @@ const router = createRouter({
     {
       path: '/transactions',
       name: 'Transactions',
-      component: () => import('../views/TransactionsView.vue')
+      component: () => import('../views/TransactionsView.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import('../views/LoginView.vue')
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('../views/RegisterView.vue')
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // check if the route requires authentication and user is not logged in
+  if (to.matched.some(record => record.meta.requiresAuth) && !localStorage.getItem('token')) {
+    // redirect to login page
+    next({ name: 'Login' });
+  } else if ((to.name === 'Login' || to.name === 'Register') && localStorage.getItem('token')) {
+    // if user is already logged in and tries to access login or register page, redirect to home page
+    next({ name: 'home' });
+  } else {
+    // otherwise continue
+    next();
+  }
+});
+
 
 export default router

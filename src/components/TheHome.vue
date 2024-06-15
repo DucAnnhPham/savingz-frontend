@@ -10,7 +10,7 @@ export default defineComponent({
     <h1>Welcome to the Home Page</h1>
     <p> Savingz is your personal expense tracker.</p>
     <p> It will help you to track your expenses and income. </p>
-    <p> To start click on Transactions. </p>
+    <p> To start login. </p>
 </template>
 
 <style scoped>
