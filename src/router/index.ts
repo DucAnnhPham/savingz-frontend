@@ -40,10 +40,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // check if the route requires authentication and user is not logged in
-  if (to.matched.some(record => record.meta.requiresAuth) && !localStorage.getItem('token')) {
+  if (to.matched.some(record => record.meta.requiresAuth) && !localStorage.getItem('userId')) {
     // redirect to login page
     next({ name: 'Login' });
-  } else if ((to.name === 'Login' || to.name === 'Register') && localStorage.getItem('token')) {
+  } else if ((to.name === 'Login' || to.name === 'Register') && localStorage.getItem('userId')) {
     // if user is already logged in and tries to access login or register page, redirect to home page
     next({ name: 'home' });
   } else {

@@ -3,7 +3,7 @@ import {computed, defineComponent} from 'vue'
 export default defineComponent({
   name: "TheHome",
   setup() {
-    const isLoggedIn = computed(() => !!window.localStorage.getItem('token'));
+    const isLoggedIn = computed(() => !!window.localStorage.getItem('userId'));
 
     return {
       isLoggedIn

@@ -4,11 +4,11 @@ import router from "@/router";
 import {computed} from "vue";
 
 const logout = () => {
-  localStorage.removeItem('token'); // Remove token from local storage
+  localStorage.removeItem('userId'); // Remove token from local storage
   router.push('/login').then(() => window.location.reload()); // Redirect to login page and then refresh
 };
 
-const isLoggedIn = computed(() => !!window.localStorage.getItem('token'));
+const isLoggedIn = computed(() => !!window.localStorage.getItem('userId'));
 
 
 </script>

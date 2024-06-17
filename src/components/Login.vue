@@ -18,7 +18,8 @@ const login = async () => {
     });
 
     if (response.status === 200) {
-      localStorage.setItem('token', response.data.token); // Save token to local storage
+      localStorage.setItem('userId', response.data); // Save userId to local storage
+      console.log('User id is: ' + response.data);
       router.push('/').then(() => window.location.reload()); // Redirect to home page
     }
   } catch (error) {
