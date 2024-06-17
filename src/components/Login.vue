@@ -61,9 +61,14 @@ const login = async () => {
 div{
   margin-top: 10px;
 }
+
+h1,h3,p {
+  color: black;
+}
 label {
   display: block;
   font-size: 15px;
+  color: black;
 }
 input{
   width: 500px;

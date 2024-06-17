@@ -75,9 +75,14 @@ const register = async () => {
 div{
   margin-top: 10px;
 }
+
+h1,p {
+  color: black;
+}
 label {
   display: block;
   font-size: 15px;
+  color: black;
 }
 input{
   width: 500px;
