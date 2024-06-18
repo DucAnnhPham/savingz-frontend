@@ -26,20 +26,21 @@ const sortField = ref('')
 const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
 
 function onFormSubmitted(): void {
-  errorMessage.value = []
+  errorMessage.value = ["", "", "", ""];
+
   if (!nameField.value) {
-    errorMessage.value.push("Name field must be filled out.");
+    errorMessage.value[0] = "Name field must be filled out.";
   }
   if (!categoryField.value) {
-    errorMessage.value.push("Category field must be filled out.");
+    errorMessage.value[1] = "Category field must be filled out.";
   }
   if (!dateField.value) {
-    errorMessage.value.push("Date field must be filled out.");
+    errorMessage.value[2] = "Date field must be filled out.";
   }
   if (!amountField.value) {
-    errorMessage.value.push("Amount field must be filled out.");
+    errorMessage.value[3] = "Amount field must be filled out.";
   }
-  if(errorMessage.value.length > 0){
+  if(errorMessage.value.some(error => error !== "                              ")){
     return;
   }
   createTransaction()
@@ -143,9 +144,12 @@ onMounted(() => requestTransactions())
       <option value="transactionAmount">Amount</option>
     </select>
   </div>
-  <tr v-if="errorMessage.length" class="error-popup">
-    <td v-for="(error, index) in errorMessage" :key="index">{{ error }}</td>
-  </tr>
+  <table class = "error-popup">
+    <td>{{ errorMessage[0] }}</td>
+    <td>{{ errorMessage[1] }}</td>
+    <td>{{ errorMessage[2] }}</td>
+    <td>{{ errorMessage[3] }}</td>
+  </table>
   <div class="container">
       <form @submit.prevent="onFormSubmitted()">
       <!-- "@submit.prevent" prevents a page refresh after submitting form -->
@@ -277,8 +281,6 @@ button {
   background: #72661b;
   color: #ffffff;
   width: 100px;
-  heigth: 50px;
-
 }
 
 
