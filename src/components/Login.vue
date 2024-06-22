@@ -53,7 +53,7 @@ const login = async () => {
   </div>
   <div>
     <h3>Don't have an account?</h3>
-    <button @click="router.push('/register')">Register</button>
+    <button2 @click="router.push('/register')">Register</button2>
   </div>
 </template>
 
@@ -83,6 +83,16 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+button2 {
+  padding: 0.5rem;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
 }
 
 </style>
