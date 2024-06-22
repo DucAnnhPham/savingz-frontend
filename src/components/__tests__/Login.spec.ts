@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { shallowMount, flushPromises } from '@vue/test-utils'
 import axios from 'axios'
-import {Router, useRouter} from 'vue-router'
+import { useRouter} from 'vue-router'
+import type { Router } from 'vue-router';
 import Login from '../Login.vue'
 
 vi.mock('axios')
