@@ -19,7 +19,7 @@ const logoutInactivity = () => {
 
 const setLogoutTimer = () => {
   if (isLoggedIn.value) { // Check if user is logged in
-    timeoutId.value = setTimeout(logoutInactivity, 10 * 60 * 1000); // Set timer to 10 minutes
+    timeoutId.value = setTimeout(logoutInactivity, 10 * 60 * 1000) as unknown as number; // Set timer to 10 minutes
   }
 };
 
