@@ -86,10 +86,12 @@ function updateTransaction(id: number, transaction: Transaction): void {
 }
 
 function removeTransaction(id: number): void {
-  axios
-      .delete<void>(`${url}/transactions/${id}`)
-      .then(() => (transactionsListData.value = transactionsListData.value.filter((h) => h.id !== id)))
-      .catch((error) => console.log(error))
+  if (window.confirm('Are you sure you want to delete this transaction?')) {
+    axios
+        .delete<void>(`${url}/transactions/${id}`)
+        .then(() => (transactionsListData.value = transactionsListData.value.filter((h) => h.id !== id)))
+        .catch((error) => console.log(error))
+  }
 }
 
 function formatDate(dateString: Date): string{
