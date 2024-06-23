@@ -1,17 +1,53 @@
 <script setup lang="ts">
-
+import {onMounted, onUnmounted, type Ref, ref} from 'vue';
 import router from "@/router";
-import {computed} from "vue";
-import {RouterLink} from "vue-router";
+import { computed } from "vue";
+import { RouterLink } from "vue-router";
+
+let timeoutId: Ref<number | null> = ref(null);
 
 const logout = () => {
   localStorage.removeItem('userId'); // Remove token from local storage
   router.push('/login').then(() => window.location.reload()); // Redirect to login page and then refresh
 };
 
+const logoutInactivity = () => {
+  localStorage.removeItem('userId');// Remove token from local storage
+  window.alert('You have been logged out due to inactivity.');
+  router.push('/login').then(() => window.location.reload()); // Redirect to login page and then refresh
+};
+
+const setLogoutTimer = () => {
+  if (isLoggedIn.value) { // Check if user is logged in
+    timeoutId.value = setTimeout(logoutInactivity, 10 * 60 * 1000); // Set timer to 10 minutes
+  }
+};
+
+const resetLogoutTimer = () => {
+  if (timeoutId.value !== null) {
+    clearTimeout(timeoutId.value); // Clear the existing timer
+  }
+  setLogoutTimer(); // Reset the timer
+};
+
+onMounted(() => {
+  // Set the initial timer
+  setLogoutTimer();
+
+  // Reset the timer on any of these events
+  window.addEventListener('mousemove', resetLogoutTimer);
+  window.addEventListener('keypress', resetLogoutTimer);
+  window.addEventListener('scroll', resetLogoutTimer);
+});
+
+onUnmounted(() => {
+  // Clean up event listeners when the component is unmounted
+  window.removeEventListener('mousemove', resetLogoutTimer);
+  window.removeEventListener('keypress', resetLogoutTimer);
+  window.removeEventListener('scroll', resetLogoutTimer);
+});
 
 const isLoggedIn = computed(() => !!window.localStorage.getItem('userId'));
-
 </script>
 
 <template>
