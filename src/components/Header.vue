@@ -1,14 +1,46 @@
 <script setup lang="ts">
-import router from "@/router";
-import {computed} from "vue";
-import {RouterLink} from "vue-router";
+import {computed, onMounted, onUnmounted, ref} from "vue";
+import {RouterLink, useRouter} from "vue-router";
+
+const router = useRouter();
+const logoutTimer = ref<ReturnType<typeof setTimeout> | null>(null);
+const isLoggedIn = computed(() => !!window.localStorage.getItem('userId'));
+
+const startLogoutTimer = () => {
+  // Set timer to log out user after 15 minutes
+  logoutTimer.value = setTimeout(() => {
+    logout();
+    window.alert('You have been logged out due to inactivity');
+  }, 0.5 * 60 * 1000);
+};
+
+const resetLogoutTimer = () => {
+  if (logoutTimer.value) {
+    clearTimeout(logoutTimer.value);
+    startLogoutTimer();
+  }
+};
 
 const logout = () => {
   localStorage.removeItem('userId'); // Remove token from local storage
   router.push('/login').then(() => window.location.reload()); // Redirect to login page and then refresh
 };
 
-const isLoggedIn = computed(() => !!window.localStorage.getItem('userId'));
+onMounted(() => {
+  if (isLoggedIn.value) {
+    startLogoutTimer();
+    window.addEventListener('mousemove', resetLogoutTimer);
+    window.addEventListener('keypress', resetLogoutTimer);
+  }
+});
+
+onUnmounted(() => {
+  if (logoutTimer.value) {
+    clearTimeout(logoutTimer.value);
+  }
+  window.removeEventListener('mousemove', resetLogoutTimer);
+  window.removeEventListener('keypress', resetLogoutTimer);
+});
 
 </script>
 
