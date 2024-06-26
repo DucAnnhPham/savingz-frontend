@@ -31,7 +31,7 @@ describe('TransactionsList', () => {
         vi.mocked(axios, true).get.mockResolvedValueOnce({ data: twoItemsResponse })
         const wrapper = shallowMount(TransactionsList, { props: { title: 'test' } })
         await flushPromises()
-        const expectedRows = 2 + twoItemsResponse.length
+        const expectedRows = 3 + twoItemsResponse.length
         expect(wrapper.findAll('tr').length).toBe(expectedRows)
         expect(wrapper.text()).toContain('wasser')
         expect(wrapper.text()).toContain('cola')
