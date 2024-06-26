@@ -73,6 +73,7 @@ header {
   left: 30px;
   width: 100%;
   z-index: 1;
+  background-color: lightgrey;
 }
 
 

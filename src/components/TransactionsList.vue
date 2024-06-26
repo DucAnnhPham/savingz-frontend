@@ -133,9 +133,6 @@ onMounted(() => requestTransactions())
 </script>
 
 <template>
-
-
-
   <h2>{{ title }}</h2>
   <div class="sort-container">
     <h3>Sort by:</h3>
@@ -222,6 +219,7 @@ onMounted(() => requestTransactions())
 h2 {
   font-size: 50px;
   color: #72661b;
+  margin-top: 50px;
 }
 h3 {
   font-size: 15px;
