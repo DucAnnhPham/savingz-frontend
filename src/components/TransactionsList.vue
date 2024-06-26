@@ -40,8 +40,10 @@ function onFormSubmitted(): void {
   if (!amountField.value) {
     errorMessage.value[3] = "Amount field must be filled out.";
   }
-  if(errorMessage.value.some(error => error !== "                              ")){
-    return;
+  for(let i = 0; i < errorMessage.value.length; i++) {
+    if (errorMessage.value[i] !== "") {
+      return;
+    }
   }
   createTransaction()
   nameField.value = "";
@@ -147,10 +149,12 @@ onMounted(() => requestTransactions())
     </select>
   </div>
   <table class = "error-popup">
-    <td>{{ errorMessage[0] }}</td>
-    <td>{{ errorMessage[1] }}</td>
-    <td>{{ errorMessage[2] }}</td>
-    <td>{{ errorMessage[3] }}</td>
+    <tr>
+      <td>{{ errorMessage[0] }}</td>
+      <td>{{ errorMessage[1] }}</td>
+      <td>{{ errorMessage[2] }}</td>
+      <td>{{ errorMessage[3] }}</td>
+    </tr>
   </table>
   <div class="container">
       <form @submit.prevent="onFormSubmitted()">
