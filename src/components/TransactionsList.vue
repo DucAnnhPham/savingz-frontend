@@ -10,6 +10,7 @@ type Transaction = {
   transactionDate: Date,
   transactionAmount: number,
   id : number,
+  userId: number,
   isEditing: boolean,
   [key: string]: string | number | Date | boolean;
 }
@@ -59,7 +60,8 @@ function createTransaction(): void {
     transactionName: nameField.value, // string
     transactionCategory: categoryField.value, // string
     transactionDate: dateField.value, // string in "yyyy-MM-dd" format
-    transactionAmount: parseFloat(amountField.value) // number
+    transactionAmount: parseFloat(amountField.value), // number
+    userId: localStorage.getItem('userId') // number
   }
   axios
       .post<Transaction>(`${url}/transactions`, transaction)
@@ -69,7 +71,7 @@ function createTransaction(): void {
 
 function requestTransactions(): void {
   axios
-      .get<Transaction[]>(`${url}/transactions`)
+      .get<Transaction[]>(`${url}/transactions?userId=${localStorage.getItem('userId')}`)
       .then((response) => (transactionsListData.value = response.data))
       .catch((error) => console.log(error))
 }
