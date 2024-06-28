@@ -16,6 +16,6 @@ import Header from './components/Header.vue'
 
 <style>
 body {
-  background-color: lightgrey;
+  background-color: #c4e5ed;
 }
 </style>

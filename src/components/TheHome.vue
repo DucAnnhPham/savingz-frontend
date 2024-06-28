@@ -24,11 +24,11 @@ export default defineComponent({
 <style scoped>
 h1 {
     font-size: 50px;
-    color: #72661b;
+    color: #000709;
 }
 p {
     font-size: 20px;
-    color: #72661b;
+    color: #000709;
 }
 
 </style>

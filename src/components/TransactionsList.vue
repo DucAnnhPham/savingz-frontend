@@ -202,7 +202,7 @@ onMounted(() => requestTransactions())
       <td class="button-container">
         <button class="button-click" @click="editTransaction(transaction)" v-if="!transaction.isEditing">Edit</button>
         <button class="button-click" @click="updateTransaction(transaction.id, transaction)" v-else>Save</button>
-        <button class="button-click" @click="removeTransaction(transaction.id)">Delete</button>
+        <button class="button-click-delete" @click="removeTransaction(transaction.id)">Delete</button>
       </td>
 
     </tr>
@@ -220,7 +220,7 @@ onMounted(() => requestTransactions())
 
 h2 {
   font-size: 50px;
-  color: #72661b;
+  color: #000709;
   margin-top: 50px;
 }
 h3 {
@@ -284,8 +284,8 @@ button {
   border-radius: 50px;
   padding: 5px;
   border: none;
-  background: #72661b;
-  color: #ffffff;
+  background: #389726;
+  color: white;
   width: 100px;
 }
 
@@ -297,12 +297,22 @@ button {
   flex-direction: row; /* Ensures the buttons are placed in a row */
 }
 .button-click {
-  background: #72661b;
-  color: #ffffff;
+  background: #cfc70a;
+  color: white;
   border: none;
   padding: 5px;
   border-radius: 50px;
   cursor: pointer;
+}
+
+.button-click-delete{
+  background: #d84a4a;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 50px;
+  cursor: pointer;
+
 }
 
 </style>

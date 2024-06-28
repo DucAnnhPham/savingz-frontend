@@ -73,14 +73,14 @@ header {
   left: 30px;
   width: 100%;
   z-index: 1;
-  background-color: lightgrey;
+  background-color: #c4e5ed;
 }
 
 
 h1 {
   font-weight: 500;
   font-size: 2.6rem;
-  color: #72661b;
+  color: #000709;
 }
 
 nav {
@@ -94,6 +94,12 @@ button{
   font-size: 15px;
   margin-top: -50px;
   margin-left: 1400px;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #d84a4a;
+  color: white;
 
 }
 

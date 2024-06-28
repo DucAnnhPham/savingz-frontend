@@ -83,6 +83,8 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: #3e3e3e;
+  color: white;
 }
 
 button2 {

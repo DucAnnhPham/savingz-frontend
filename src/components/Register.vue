@@ -96,6 +96,10 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+
+
 }
 
 </style>
