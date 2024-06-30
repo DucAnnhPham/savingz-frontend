@@ -22,7 +22,8 @@ const amountField = ref("")
 const dateField = ref("")
 const categories = ['Food', 'Clothing', 'Rent', 'Utilities', 'Entertainment', 'Income' ,'Other']
 const errorMessage: Ref<string[]> = ref([])
-const sortField = ref('')
+const sortField = ref('id')
+const sortOrder = ref('asc') // 'asc' for ascending, 'desc' for descending
 
 const url = import.meta.env.VITE_APP_BACKEND_BASE_URL
 
@@ -109,11 +110,33 @@ function formatDate(dateString: Date): string{
 function sortTransactions() {
   if (sortField.value) {
     transactionsListData.value.sort((a, b) => {
-      if (a[sortField.value] < b[sortField.value]) {
-        return -1;
+      let aValue = a[sortField.value];
+      let bValue = b[sortField.value];
+
+      // If sorting by amount, use absolute values
+      if (sortField.value === 'transactionAmount') {
+        if (typeof aValue === "number") {
+          aValue = Math.abs(aValue);
+        }
+        if (typeof bValue === "number") {
+          bValue = Math.abs(bValue);
+        }
       }
-      if (a[sortField.value] > b[sortField.value]) {
-        return 1;
+
+      if (sortOrder.value === 'asc') {
+        if (aValue < bValue) {
+          return -1;
+        }
+        if (aValue > bValue) {
+          return 1;
+        }
+      } else if (sortOrder.value === 'desc') {
+        if (aValue < bValue) {
+          return 1;
+        }
+        if (aValue > bValue) {
+          return -1;
+        }
       }
       return 0;
     })
@@ -128,6 +151,7 @@ function getTotalAmount() {
   return total;
 }
 watch(sortField, sortTransactions)
+watch(sortOrder, sortTransactions)
 
 // Lifecycle Hook
 onMounted(() => requestTransactions())
@@ -139,12 +163,15 @@ onMounted(() => requestTransactions())
   <div class="sort-container">
     <h3>Sort by:</h3>
     <select v-model="sortField">
-      <option value="" disabled selected>Default(recently added)</option>
-      <option value="id">recently added</option>
+      <option value="id">added</option>
       <option value="transactionName">Name</option>
       <option value="transactionCategory">Category</option>
       <option value="transactionDate">Date</option>
       <option value="transactionAmount">Amount</option>
+    </select>
+    <select v-model="sortOrder">
+      <option value="asc">↑ ascending</option>
+      <option value="desc">↓ descending</option>
     </select>
   </div>
   <table class = "error-popup">
